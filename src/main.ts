@@ -62,6 +62,7 @@ function main() {
 			time: { value: 0.0 }, // Initialize time to 0
 			uPositions: { value: null },
 		},
+		transparent: true,
 		vertexShader: vertex,
 		fragmentShader: fragment,
 	});
@@ -80,7 +81,7 @@ function main() {
 	// fbo shit starts here
 	let fbo = getRenderTarget();
 	let fbo1 = getRenderTarget();
-	const size = 128;
+	const size = 256;
 	const fboScene = new THREE.Scene();
 	const fboCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 	fboCamera.position.set(0, 0, 0.5);
@@ -116,12 +117,66 @@ function main() {
 	const fboMaterial = new THREE.ShaderMaterial({
 		uniforms: {
 			uPositions: { value: fboTexture },
+			uInfo: { value: null },
 			time: { value: 0 },
+			uMouse: { value: new THREE.Vector2(0, 0) },
 			resolution: { value: new THREE.Vector4() },
 		},
 		vertexShader: simvertex,
 		fragmentShader: simfragment,
 	});
+
+	// ray caster
+	const raycaster = new THREE.Raycaster();
+	const pointer = new THREE.Vector2();
+
+	function rayCasting() {
+		const dummy = new THREE.Mesh(
+			new THREE.PlaneGeometry(100, 100),
+			new THREE.MeshBasicMaterial()
+		);
+
+		document.addEventListener('pointermove', (e) => {
+			pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+			pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+			raycaster.setFromCamera(pointer, camera);
+			let intersects = raycaster.intersectObject(dummy);
+			if (intersects.length > 0 && intersects[0].point !== undefined) {
+				let { x, y }: THREE.Vec2 = intersects[0].point;
+				fboMaterial.uniforms.uMouse.value = new THREE.Vector2(x, y);
+			}
+		});
+	}
+
+	// fbo texture for uInfo
+	const infoArray = new Float32Array(size * size * 4);
+
+	for (let i = 0; i < size; i++) {
+		for (let j = 0; j < size; j++) {
+			let index = (i + j * size) * 4;
+
+			infoArray[index + 0] = 0.5 + Math.random();
+			infoArray[index + 1] = 0.5 + Math.random();
+			infoArray[index + 2] = 1;
+			infoArray[index + 3] = 1;
+		}
+	}
+
+	const info = new THREE.DataTexture(
+		infoArray,
+		size,
+		size,
+		THREE.RGBAFormat,
+		THREE.FloatType
+	);
+
+	info.magFilter = THREE.NearestFilter;
+	info.minFilter = THREE.NearestFilter;
+	info.needsUpdate = true;
+	fboMaterial.uniforms.uInfo.value = info;
+
+	// fbo info ends
 
 	const fboMesh = new THREE.Mesh(fboGeometry, fboMaterial);
 	fboScene.add(fboMesh);
@@ -158,7 +213,8 @@ function main() {
 	const count = size ** 2;
 	let geometry = new THREE.BufferGeometry();
 	let postions = new Float32Array(count * 3);
-	let uv = new Float32Array(count * 2);
+	// dapat 2 to dati testing ko lang
+	let uv = new Float32Array(count * 3);
 	for (let i = 0; i < size; i++) {
 		for (let k = 0; k < size; k++) {
 			let index = i + k * size;
@@ -181,15 +237,15 @@ function main() {
 	function render() {
 		const deltaTime = clock.getDelta();
 		// resizes the display
-
+		rayCasting();
 		if (resizeRendererToDisplaySize(renderer)) {
 			const canvas = renderer.domElement;
 			camera.aspect = canvas.width / canvas.height;
 			camera.updateProjectionMatrix();
 		}
 		requestAnimationFrame(render);
-		shapeMaterial.uniforms.time.value += 0.01;
-		fboMaterial.uniforms.time.value += 0.01;
+		shapeMaterial.uniforms.time.value += 0.05;
+		fboMaterial.uniforms.time.value += 0.05;
 
 		fboMaterial.uniforms.uPositions.value = fbo1.texture;
 		shapeMaterial.uniforms.uPositions.value = fbo.texture;
