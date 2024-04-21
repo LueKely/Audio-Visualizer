@@ -18,6 +18,22 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	return needResize;
 }
 
+const audioCtx = new AudioContext();
+
+// Create audio context
+const audioContext = new window.AudioContext();
+
+// Load audio file
+const audioElement = new Audio('your-audio-file.mp3');
+audioElement.crossOrigin = 'anonymous'; // Enable CORS if loading from a different origin
+
+// Create audio source
+const audioSource = audioContext.createMediaElementSource(audioElement);
+
+// Create analyser node
+const analyser = audioContext.createAnalyser();
+analyser.fftSize = 256; // Configure the size of the FFT (Fast Fourier Transform)
+
 function main() {
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
