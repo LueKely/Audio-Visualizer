@@ -18,23 +18,47 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	return needResize;
 }
 
-const audioCtx = new AudioContext();
+async function main() {
+	const audioContext = new AudioContext();
+	const analyser = audioContext.createAnalyser();
+	let source: null | AudioBufferSourceNode = null;
 
-// Create audio context
-const audioContext = new window.AudioContext();
+	async function loadAndPlayAudio(
+		url: string,
+		context: AudioContext
+	): Promise<AudioBuffer> {
+		const response = await fetch(url);
+		const audioData = await response.arrayBuffer();
+		const audioBuffer = await context.decodeAudioData(audioData);
 
-// Load audio file
-const audioElement = new Audio('SlickBack.mp3');
-audioElement.crossOrigin = 'anonymous'; // Enable CORS if loading from a different origin
+		return audioBuffer;
+	}
 
-// Create audio source
-const audioSource = audioContext.createMediaElementSource(audioElement);
+	let isPress = false;
 
-// Create analyser node
-const analyser = audioContext.createAnalyser();
-analyser.fftSize = 256; // Configure the size of the FFT (Fast Fourier Transform)
+	window.addEventListener('keypress', async () => {
+		if (isPress === false) {
+			isPress = true;
 
-function main() {
+			if (!source) {
+				source = audioContext.createBufferSource();
+				const audioBuffer = await loadAndPlayAudio(
+					'SlickBack.mp3',
+					audioContext
+				);
+				source.buffer = await audioBuffer;
+				await source.connect(audioContext.destination);
+			}
+
+			await source.start();
+		} else {
+			isPress = false;
+
+			if (source != null) await source.stop();
+			source = await null;
+		}
+	});
+
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
 
