@@ -17,47 +17,70 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	}
 	return needResize;
 }
-
-async function main() {
+function main() {
 	const audioContext = new AudioContext();
 	const analyser = audioContext.createAnalyser();
-	let source: null | AudioBufferSourceNode = null;
+	let source: AudioBufferSourceNode = audioContext.createBufferSource();
 
-	async function loadAndPlayAudio(
-		url: string,
-		context: AudioContext
-	): Promise<AudioBuffer> {
-		const response = await fetch(url);
-		const audioData = await response.arrayBuffer();
-		const audioBuffer = await context.decodeAudioData(audioData);
+	const audioElement = new Audio('SlickBack.mp3');
+	const audioSource = audioContext.createMediaElementSource(audioElement);
 
-		return audioBuffer;
-	}
+	analyser.fftSize = 256; // Configure the size of the FFT (Fast Fourier Transform)
+
+	// Connect nodes
+	audioSource.connect(analyser);
+	analyser.connect(audioContext.destination);
+
+	// Get frequency data
+	const bufferLength = analyser.frequencyBinCount;
+	const dataArray = new Uint8Array(bufferLength);
+
+	window.addEventListener(
+		'click',
+		() => {
+			// check if context is in suspended state (autoplay policy)
+			if (audioContext.state === 'suspended') {
+				audioContext.resume();
+				isPress = true;
+			}
+		},
+		false
+	);
+
+	// async function loadAndPlayAudio(
+	// 	url: string,
+	// 	context: AudioContext
+	// ): Promise<AudioBuffer> {
+	// 	const response = await fetch(url);
+	// 	const audioData = await response.arrayBuffer();
+	// 	const audioBuffer = await context.decodeAudioData(audioData);
+
+	// 	return audioBuffer;
+	// }
 
 	let isPress = false;
+	// window.addEventListener('keypress', async () => {
+	// 	if (isPress === false) {
+	// 		isPress = true;
 
-	window.addEventListener('keypress', async () => {
-		if (isPress === false) {
-			isPress = true;
+	// 		if (!source) {
+	// 			source = audioContext.createBufferSource();
+	// 			const audioBuffer = await loadAndPlayAudio(
+	// 				'SlickBack.mp3',
+	// 				audioContext
+	// 			);
+	// 			source.buffer = await audioBuffer;
+	// 			await source.connect(audioContext.destination);
+	// 		}
 
-			if (!source) {
-				source = audioContext.createBufferSource();
-				const audioBuffer = await loadAndPlayAudio(
-					'SlickBack.mp3',
-					audioContext
-				);
-				source.buffer = await audioBuffer;
-				await source.connect(audioContext.destination);
-			}
+	// 		await source.start();
+	// 	} else {
+	// 		isPress = false;
 
-			await source.start();
-		} else {
-			isPress = false;
-
-			if (source != null) await source.stop();
-			source = await null;
-		}
-	});
+	// 		if (source != null) await source.stop();
+	// 		source = await null;
+	// 	}
+	// });
 
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
@@ -274,7 +297,13 @@ async function main() {
 	scene.add(points);
 
 	// animation
-	function render() {
+	async function render() {
+		// if (isPress == true) {
+		// 	analyser.getByteFrequencyData(dataArray);
+
+		// 	console.log(dataArray[Math.floor(Math.random())]);
+		// }
+
 		const deltaTime = clock.getDelta();
 		// resizes the display
 		rayCasting();
