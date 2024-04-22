@@ -22,8 +22,10 @@ function main() {
 	const analyser = audioContext.createAnalyser();
 	let source: AudioBufferSourceNode = audioContext.createBufferSource();
 
-	const audioElement = new Audio('SlickBack.mp3');
+	const audioElement = new Audio('/SlickBack.mp3');
 	const audioSource = audioContext.createMediaElementSource(audioElement);
+
+	console.log(audioElement);
 
 	analyser.fftSize = 256; // Configure the size of the FFT (Fast Fourier Transform)
 
@@ -33,11 +35,12 @@ function main() {
 
 	// Get frequency data
 	const bufferLength = analyser.frequencyBinCount;
-	const dataArray = new Uint8Array(bufferLength);
 
 	window.addEventListener(
 		'click',
 		() => {
+			console.log('test');
+
 			// check if context is in suspended state (autoplay policy)
 			if (audioContext.state === 'suspended') {
 				audioContext.resume();
@@ -298,11 +301,11 @@ function main() {
 
 	// animation
 	async function render() {
-		// if (isPress == true) {
-		// 	analyser.getByteFrequencyData(dataArray);
-
-		// 	console.log(dataArray[Math.floor(Math.random())]);
-		// }
+		if (isPress == true) {
+			const dataArray = new Uint8Array(analyser.fftSize);
+			analyser.getByteTimeDomainData(dataArray);
+			console.log(dataArray[Math.floor(Math.random())]);
+		}
 
 		const deltaTime = clock.getDelta();
 		// resizes the display
