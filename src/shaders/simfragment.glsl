@@ -140,7 +140,9 @@ vec4 pos = texture2D(uPositions,vUv);
 
 vec4 info = texture2D(uInfo, vUv);
 
-info.x+= uFreq;
+
+info += uFreq;
+
 
 
 float radius =length(pos.xy);

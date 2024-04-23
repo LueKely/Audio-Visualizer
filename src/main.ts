@@ -283,9 +283,9 @@ function main() {
 			analyser.getByteFrequencyData(dataArray);
 			const output = dataArray.reduce((a, b) => a + b, 0);
 			const reducedOutput = output / dataArray.length;
-			const normalize = (reducedOutput - 0) / bufferLength - 0;
-			shapeMaterial.uniforms.uFreq.value = normalize;
-			fboMaterial.uniforms.uFreq.value = normalize;
+
+			shapeMaterial.uniforms.uFreq.value = reducedOutput;
+			fboMaterial.uniforms.uFreq.value = reducedOutput;
 		} else {
 			shapeMaterial.uniforms.uFreq.value = 1.0;
 			fboMaterial.uniforms.uFreq.value = 1.0;
