@@ -80,6 +80,7 @@ function main() {
 	let isPlayed = false;
 	audioLoader.load('./src/assets/SlickBack.mp3', (buffer) => {
 		sound.setBuffer(buffer);
+		sound.setVolume(0.2);
 		window.addEventListener('click', () => {
 			if (isPlayed == false) {
 				console.log('test');
@@ -294,13 +295,16 @@ function main() {
 
 		if (isPlayed == true) {
 			const average = analyser.getAverageFrequency();
-			console.log(average);
+			const normalized = 1.0 - average / 255;
+			console.log(normalized);
 
-			shapeMaterial.uniforms.uFreq.value = 1.0;
-			fboMaterial.uniforms.uFreq.value = 1.0;
+			console.log(normalized);
+
+			shapeMaterial.uniforms.uFreq.value = average;
+			fboMaterial.uniforms.uFreq.value = average;
 		} else {
-			shapeMaterial.uniforms.uFreq.value = 1.0;
-			fboMaterial.uniforms.uFreq.value = 1.0;
+			shapeMaterial.uniforms.uFreq.value = 0.1;
+			fboMaterial.uniforms.uFreq.value = 0.1;
 		}
 
 		// resizes the display

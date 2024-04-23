@@ -140,7 +140,7 @@ vec4 pos = texture2D(uPositions,vUv);
 
 vec4 info = texture2D(uInfo, vUv);
 
-info.x+= uFreq;
+
 
 
 float radius =length(pos.xy);
@@ -161,7 +161,9 @@ vec3 targetPos = vec3(cos(angle),sin(angle),0.0) * radius;
 
 pos.xy += (targetPos.xy - pos.xy) * 0.1;
 
-pos.xy += curl(pos.xyz * 4., time * 0.1 , 0.1).xy * 0.005;
+pos.xy += curl(pos.xyz * 4., time * 0.1 , uFreq /10.).xy * 0.005;
+
+
 
 float dist = length(pos.xy - (mouse * 0.75));
 
