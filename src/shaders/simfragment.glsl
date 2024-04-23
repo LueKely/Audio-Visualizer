@@ -7,6 +7,7 @@ uniform sampler2D uPositions;
 uniform sampler2D uInfo;
 uniform float time; // basically u_time
 uniform vec2 u_resolution;
+uniform float uFreq;
 varying vec2 vUv; //the resolution
 uniform vec2 uMouse;
 
@@ -127,12 +128,20 @@ vec3 curl( in vec3 p, in float noiseTime, in float persistence ) {
 void main(){
   // choose either of the two
   vec2 uv = vUv;
+ 
 
 
 vec2 mouse =uMouse;
 
-vec4 pos = texture2D(uPositions, vUv);
+vec4 pos = texture2D(uPositions,vUv);
+
+// pos.z +=time;
+
+
 vec4 info = texture2D(uInfo, vUv);
+
+info.x+= uFreq;
+
 
 float radius =length(pos.xy);
 float circularForce = 1. - smoothstep(0.3, 1.4,abs(pos.x-radius));
@@ -154,7 +163,7 @@ pos.xy += (targetPos.xy - pos.xy) * 0.1;
 
 pos.xy += curl(pos.xyz * 4., time * 0.1 , 0.1).xy * 0.005;
 
-float dist = length(pos.xy - mouse);
+float dist = length(pos.xy - (mouse * 0.75));
 
 vec2 dir = normalize(pos.xy - mouse);
 pos.xy += dir * 0.1 * smoothstep(0.5, 0.0, dist);

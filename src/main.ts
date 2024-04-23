@@ -6,6 +6,8 @@ import fragment from './shaders/fragment.frag';
 import vertex from './shaders/vertex.glsl';
 import simvertex from './shaders/simvert.glsl';
 import simfragment from './shaders/simfragment.glsl';
+import { normalize } from 'three/src/math/MathUtils.js';
+
 function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	const canvas = renderer.domElement;
 	const pixelRatio = window.devicePixelRatio;
@@ -17,73 +19,47 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	}
 	return needResize;
 }
+
+const audioContext = new AudioContext();
+const audioElement = document.querySelector('audio');
+const analyser = audioContext.createAnalyser();
+
+// Check if audioContext or audio element is properly initialized
+if (!audioContext || !audioElement) {
+	throw new Error('AudioContext is not supported');
+}
+
+const track = audioContext.createMediaElementSource(audioElement);
+track.connect(audioContext.destination);
+track.connect(analyser);
+analyser.fftSize = 512;
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
+let isPlayed = false;
+
 function main() {
-	const audioContext = new AudioContext();
-	const analyser = audioContext.createAnalyser();
-	let source: AudioBufferSourceNode = audioContext.createBufferSource();
+	if (!audioContext || !audioElement) {
+		throw new Error('AudioContext is not supported');
+	}
 
-	const audioElement = new Audio('/SlickBack.mp3');
-	const audioSource = audioContext.createMediaElementSource(audioElement);
+	window.addEventListener('keydown', (e) => {
+		const key: string = e.key;
 
-	console.log(audioElement);
-
-	analyser.fftSize = 256; // Configure the size of the FFT (Fast Fourier Transform)
-
-	// Connect nodes
-	audioSource.connect(analyser);
-	analyser.connect(audioContext.destination);
-
-	// Get frequency data
-	const bufferLength = analyser.frequencyBinCount;
-
-	window.addEventListener(
-		'click',
-		() => {
-			console.log('test');
-
-			// check if context is in suspended state (autoplay policy)
+		if (key == 's') {
 			if (audioContext.state === 'suspended') {
 				audioContext.resume();
-				isPress = true;
 			}
-		},
-		false
-	);
 
-	// async function loadAndPlayAudio(
-	// 	url: string,
-	// 	context: AudioContext
-	// ): Promise<AudioBuffer> {
-	// 	const response = await fetch(url);
-	// 	const audioData = await response.arrayBuffer();
-	// 	const audioBuffer = await context.decodeAudioData(audioData);
-
-	// 	return audioBuffer;
-	// }
-
-	let isPress = false;
-	// window.addEventListener('keypress', async () => {
-	// 	if (isPress === false) {
-	// 		isPress = true;
-
-	// 		if (!source) {
-	// 			source = audioContext.createBufferSource();
-	// 			const audioBuffer = await loadAndPlayAudio(
-	// 				'SlickBack.mp3',
-	// 				audioContext
-	// 			);
-	// 			source.buffer = await audioBuffer;
-	// 			await source.connect(audioContext.destination);
-	// 		}
-
-	// 		await source.start();
-	// 	} else {
-	// 		isPress = false;
-
-	// 		if (source != null) await source.stop();
-	// 		source = await null;
-	// 	}
-	// });
+			if (isPlayed === false) {
+				audioElement.play();
+				isPlayed = true;
+			} else {
+				audioElement.pause();
+				isPlayed = false;
+			}
+		}
+	});
 
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
@@ -122,6 +98,7 @@ function main() {
 		wireframe: false,
 		side: THREE.DoubleSide,
 		uniforms: {
+			uFreq: { value: 0.0 },
 			u_resolution: {
 				value: new THREE.Vector2(),
 			}, // This will be automatically set by Three.js
@@ -136,8 +113,6 @@ function main() {
 	// uniform variables
 	const canvasSize = new THREE.Vector2(canvas.width, canvas.height);
 	shapeMaterial.uniforms.u_resolution.value.copy(canvasSize);
-
-	const Mesh = new THREE.Mesh(geo, shapeMaterial);
 
 	// scene.add(Mesh);
 
@@ -185,6 +160,7 @@ function main() {
 			uPositions: { value: fboTexture },
 			uInfo: { value: null },
 			time: { value: 0 },
+			uFreq: { value: 0.0 },
 			uMouse: { value: new THREE.Vector2(0, 0) },
 			resolution: { value: new THREE.Vector4() },
 		},
@@ -301,13 +277,20 @@ function main() {
 
 	// animation
 	async function render() {
-		if (isPress == true) {
-			const dataArray = new Uint8Array(analyser.fftSize);
-			analyser.getByteTimeDomainData(dataArray);
-			console.log(dataArray[Math.floor(Math.random())]);
+		const deltaTime = clock.getDelta();
+
+		if (isPlayed == true) {
+			analyser.getByteFrequencyData(dataArray);
+			const output = dataArray.reduce((a, b) => a + b, 0);
+			const reducedOutput = output / dataArray.length;
+			const normalize = (reducedOutput - 0) / bufferLength - 0;
+			shapeMaterial.uniforms.uFreq.value = normalize;
+			fboMaterial.uniforms.uFreq.value = normalize;
+		} else {
+			shapeMaterial.uniforms.uFreq.value = 1.0;
+			fboMaterial.uniforms.uFreq.value = 1.0;
 		}
 
-		const deltaTime = clock.getDelta();
 		// resizes the display
 		rayCasting();
 		if (resizeRendererToDisplaySize(renderer)) {

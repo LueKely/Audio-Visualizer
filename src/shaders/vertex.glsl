@@ -5,6 +5,7 @@ precision mediump float;
 varying vec2 vUv;
 varying vec4 vColor;
 uniform float time;	
+uniform float uFreq;
 uniform sampler2D uPositions;
   
 void main()	{
