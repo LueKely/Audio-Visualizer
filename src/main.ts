@@ -6,7 +6,7 @@ import fragment from './shaders/fragment.frag';
 import vertex from './shaders/vertex.glsl';
 import simvertex from './shaders/simvert.glsl';
 import simfragment from './shaders/simfragment.glsl';
-import { normalize } from 'three/src/math/MathUtils.js';
+import composables from './composables';
 
 function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	const canvas = renderer.domElement;
@@ -22,44 +22,34 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 
 const audioContext = new AudioContext();
 const audioElement = document.querySelector('audio');
-const analyser = audioContext.createAnalyser();
 
 // Check if audioContext or audio element is properly initialized
 if (!audioContext || !audioElement) {
 	throw new Error('AudioContext is not supported');
 }
 
-const track = audioContext.createMediaElementSource(audioElement);
-track.connect(audioContext.destination);
-track.connect(analyser);
-analyser.fftSize = 512;
-const bufferLength = analyser.frequencyBinCount;
-const dataArray = new Uint8Array(bufferLength);
-
-let isPlayed = false;
-
 function main() {
 	if (!audioContext || !audioElement) {
 		throw new Error('AudioContext is not supported');
 	}
 
-	window.addEventListener('keydown', (e) => {
-		const key: string = e.key;
+	// window.addEventListener('keydown', (e) => {
+	// 	const key: string = e.key;
 
-		if (key == 's') {
-			if (audioContext.state === 'suspended') {
-				audioContext.resume();
-			}
+	// 	if (key == 's') {
+	// 		if (audioContext.state === 'suspended') {
+	// 			audioContext.resume();
+	// 		}
 
-			if (isPlayed === false) {
-				audioElement.play();
-				isPlayed = true;
-			} else {
-				audioElement.pause();
-				isPlayed = false;
-			}
-		}
-	});
+	// 		if (isPlayed === false) {
+	// 			audioElement.play();
+	// 			isPlayed = true;
+	// 		} else {
+	// 			audioElement.pause();
+	// 			isPlayed = false;
+	// 		}
+	// 	}
+	// });
 
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
@@ -81,6 +71,29 @@ function main() {
 
 	//camera position
 	camera.position.z = 3;
+
+	// audio shit
+	const audioListener = new THREE.AudioListener();
+	camera.add(audioListener);
+	const sound = new THREE.Audio(audioListener);
+	const audioLoader = new THREE.AudioLoader();
+	let isPlayed = false;
+	audioLoader.load('./src/assets/SlickBack.mp3', (buffer) => {
+		sound.setBuffer(buffer);
+		window.addEventListener('click', () => {
+			if (isPlayed == false) {
+				console.log('test');
+
+				sound.play();
+				isPlayed = true;
+			} else {
+				sound.pause();
+				isPlayed = false;
+			}
+		});
+	});
+
+	const analyser = new THREE.AudioAnalyser(sound, 32);
 
 	//scene
 	const scene = new THREE.Scene();
@@ -280,12 +293,11 @@ function main() {
 		const deltaTime = clock.getDelta();
 
 		if (isPlayed == true) {
-			analyser.getByteFrequencyData(dataArray);
-			const output = dataArray.reduce((a, b) => a + b, 0);
-			const reducedOutput = output / dataArray.length;
-			const normalize = (reducedOutput - 0) / bufferLength - 0;
-			shapeMaterial.uniforms.uFreq.value = normalize;
-			fboMaterial.uniforms.uFreq.value = normalize;
+			const average = analyser.getAverageFrequency();
+			console.log(average);
+
+			shapeMaterial.uniforms.uFreq.value = 1.0;
+			fboMaterial.uniforms.uFreq.value = 1.0;
 		} else {
 			shapeMaterial.uniforms.uFreq.value = 1.0;
 			fboMaterial.uniforms.uFreq.value = 1.0;
