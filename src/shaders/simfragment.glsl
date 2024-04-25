@@ -147,7 +147,9 @@ float radius =length(pos.xy);
 float circularForce = 1. - smoothstep(0.3, 1.4,abs(pos.x-radius));
 float angle = atan(pos.y,pos.x) - info.y * 0.3 * mix(0.5,1.,circularForce);
 
-float targetRadius = mix(info.x, 1.8, 0.5  + 0.45  * sin(angle * 2. + time * 0.6));
+
+// the 1. there you can change it to change the number of targe radiuses
+float targetRadius = mix(info.x, 1.8, 0.5  + 0.45  * sin(angle * 1. + time * 0.06));
 
 
 radius += (targetRadius - radius) *mix(0.2, 0.5,circularForce);
@@ -159,9 +161,11 @@ radius += (targetRadius - radius) *mix(0.2, 0.5,circularForce);
 
 vec3 targetPos = vec3(cos(angle),sin(angle),0.0) * radius;
 
+// this changes the rotation speed
 pos.xy += (targetPos.xy - pos.xy) * 0.1;
 
-pos.xy += curl(pos.xyz * 4., time * 0.1 , uFreq /10.).xy * 0.005;
+
+pos.xy += curl(pos.xyz * 4., time * 0.1 , 0.005).xy * 0.005;
 
 
 

@@ -18,7 +18,7 @@ void main(){
   // vec2 coord =   gl_FragCoord.xy / u_resolution;
   // gl_FragColor = vec4(cos(len * 2.0), cos(len - 1.0), sin(time *0.5) , 1.0);
 
-  gl_FragColor = vec4(1.);
+  gl_FragColor = vec4(vColor);
     // gl_FragColor = vec4( uFreq);
 
 }

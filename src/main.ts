@@ -94,7 +94,7 @@ function main() {
 		});
 	});
 
-	const analyser = new THREE.AudioAnalyser(sound, 32);
+	const analyser = new THREE.AudioAnalyser(sound, 256);
 
 	//scene
 	const scene = new THREE.Scene();
@@ -136,7 +136,8 @@ function main() {
 	// fbo shit starts here
 	let fbo = getRenderTarget();
 	let fbo1 = getRenderTarget();
-	const size = 256;
+	// 256 dati
+	const size = 128;
 	const fboScene = new THREE.Scene();
 	const fboCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 	fboCamera.position.set(0, 0, 0.5);
@@ -270,7 +271,7 @@ function main() {
 	let geometry = new THREE.BufferGeometry();
 	let postions = new Float32Array(count * 3);
 	// dapat 2 to dati testing ko lang
-	let uv = new Float32Array(count * 3);
+	let uv = new Float32Array(count * 2);
 	for (let i = 0; i < size; i++) {
 		for (let k = 0; k < size; k++) {
 			let index = i + k * size;
@@ -289,16 +290,28 @@ function main() {
 	const points = new THREE.Points(geometry, shapeMaterial);
 	scene.add(points);
 
+	const thresholdFrequency = 100;
+
+	function getSum(ftt: Uint8Array) {
+		let count = 0;
+
+		ftt.forEach((frequency) => {
+			count += frequency;
+		});
+		return count;
+	}
+
 	// animation
 	async function render() {
 		const deltaTime = clock.getDelta();
 
 		if (isPlayed == true) {
-			const average = analyser.getAverageFrequency();
-			const normalized = 1.0 - average / 255;
-			console.log(normalized);
+			const frequency = analyser.getFrequencyData();
+			const slicedFreq = frequency.slice(64);
 
-			console.log(normalized);
+			const average = getSum(slicedFreq) / 256;
+
+			console.log(average);
 
 			shapeMaterial.uniforms.uFreq.value = average;
 			fboMaterial.uniforms.uFreq.value = average;
