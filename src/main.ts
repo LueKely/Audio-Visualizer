@@ -290,31 +290,17 @@ function main() {
 	const points = new THREE.Points(geometry, shapeMaterial);
 	scene.add(points);
 
-	const thresholdFrequency = 100;
-
-	function getSum(ftt: Uint8Array) {
-		let count = 0;
-
-		ftt.forEach((frequency) => {
-			count += frequency;
-		});
-		return count;
-	}
-
 	// animation
 	async function render() {
 		const deltaTime = clock.getDelta();
 
 		if (isPlayed == true) {
-			const frequency = analyser.getFrequencyData();
-			const slicedFreq = frequency.slice(64);
+			const frequency = analyser.getAverageFrequency() / 125;
 
-			const average = getSum(slicedFreq) / 256;
+			console.log(frequency);
 
-			console.log(average);
-
-			shapeMaterial.uniforms.uFreq.value = average;
-			fboMaterial.uniforms.uFreq.value = average;
+			shapeMaterial.uniforms.uFreq.value = frequency;
+			fboMaterial.uniforms.uFreq.value = frequency;
 		} else {
 			shapeMaterial.uniforms.uFreq.value = 0.1;
 			fboMaterial.uniforms.uFreq.value = 0.1;

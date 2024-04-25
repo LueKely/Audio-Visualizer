@@ -149,7 +149,7 @@ float angle = atan(pos.y,pos.x) - info.y * 0.3 * mix(0.5,1.,circularForce);
 
 
 // the 1. there you can change it to change the number of targe radiuses
-float targetRadius = mix(info.x, 1.8, 0.5  + 0.45  * sin(angle * 1. + time * 0.06));
+float targetRadius = mix(info.x, 1.8, 0.5  + uFreq  * sin(angle * 1. * uFreq + time * 0.06));
 
 
 radius += (targetRadius - radius) *mix(0.2, 0.5,circularForce);
@@ -174,7 +174,7 @@ float dist = length(pos.xy - (mouse * 0.75));
 vec2 dir = normalize(pos.xy - mouse);
 pos.xy += dir * 0.1 * smoothstep(0.5, 0.0, dist);
 
-gl_FragColor = vec4(pos.xy, 1.,1.);
+gl_FragColor = vec4(pos.xy, uFreq,1.);
 
 
 

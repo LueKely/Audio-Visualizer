@@ -14,7 +14,11 @@ vec4 pos = texture2D(uPositions, uv);
 
 float angle = atan(pos.y,pos.x);
 
-vColor = vec4(0.5 + 0.45 * sin(angle + time )) * 0.9;
+vColor = vec4(uv,uFreq,0.55 + 0.55 * sin(angle + time )) ;
+
+vColor.y+= uFreq;
+vColor.x-= uFreq;
+
 
 vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.);
 gl_PointSize = 1. * (1./ - mvPosition.z);
