@@ -6,7 +6,6 @@ import fragment from './shaders/fragment.frag';
 import vertex from './shaders/vertex.glsl';
 import simvertex from './shaders/simvert.glsl';
 import simfragment from './shaders/simfragment.glsl';
-import composables from './composables';
 
 function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	const canvas = renderer.domElement;
@@ -32,24 +31,6 @@ function main() {
 	if (!audioContext || !audioElement) {
 		throw new Error('AudioContext is not supported');
 	}
-
-	// window.addEventListener('keydown', (e) => {
-	// 	const key: string = e.key;
-
-	// 	if (key == 's') {
-	// 		if (audioContext.state === 'suspended') {
-	// 			audioContext.resume();
-	// 		}
-
-	// 		if (isPlayed === false) {
-	// 			audioElement.play();
-	// 			isPlayed = true;
-	// 		} else {
-	// 			audioElement.pause();
-	// 			isPlayed = false;
-	// 		}
-	// 	}
-	// });
 
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
@@ -77,14 +58,13 @@ function main() {
 	camera.add(audioListener);
 	const sound = new THREE.Audio(audioListener);
 	const audioLoader = new THREE.AudioLoader();
+
 	let isPlayed = false;
 	audioLoader.load('./src/assets/SlickBack.mp3', (buffer) => {
 		sound.setBuffer(buffer);
 		sound.setVolume(0.2);
-		window.addEventListener('click', () => {
+		canvas.addEventListener('click', () => {
 			if (isPlayed == false) {
-				console.log('test');
-
 				sound.play();
 				isPlayed = true;
 			} else {
