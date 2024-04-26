@@ -169,7 +169,7 @@ pos.xy += curl(pos.xyz * 4., time * 1. , uFreq * 2.).xy * 0.005;
 
 
 
-float dist = length(pos.xy - (mouse * 0.75));
+float dist = length(pos.xy - (mouse ));
 
 vec2 dir = normalize(pos.xy - mouse);
 pos.xy += dir * 0.1 * smoothstep(0.5, 0.0, dist);

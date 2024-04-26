@@ -41,7 +41,11 @@ function main() {
 	}
 
 	// rederer
-	const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+	const renderer = new THREE.WebGLRenderer({
+		antialias: true,
+		canvas,
+		alpha: true,
+	});
 
 	// camera
 	const fov = 75;
@@ -170,10 +174,14 @@ function main() {
 	function rayCasting() {
 		const dummy = new THREE.Mesh(
 			new THREE.PlaneGeometry(100, 100),
-			new THREE.MeshBasicMaterial()
+			new THREE.MeshBasicMaterial({ color: 0xffffff })
 		);
 
-		document.addEventListener('pointermove', (e) => {
+		// scene.add(dummy);
+
+		if (canvas == null) throw new Error('Canvas not found');
+
+		canvas.addEventListener('pointermove', (e) => {
 			pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
 			pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
@@ -272,12 +280,8 @@ function main() {
 
 	// animation
 	async function render() {
-		const deltaTime = clock.getDelta();
-
 		if (isPlayed == true) {
 			const frequency = analyser.getAverageFrequency() / 125;
-
-			console.log(frequency);
 
 			shapeMaterial.uniforms.uFreq.value = frequency;
 			fboMaterial.uniforms.uFreq.value = frequency;
