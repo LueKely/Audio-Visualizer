@@ -21,7 +21,7 @@ vColor.x-= uFreq;
 
 
 vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.);
-gl_PointSize = 1. * (1./ - mvPosition.z);
+gl_PointSize = 1.0 * (2./ - mvPosition.z);
 gl_Position = projectionMatrix * mvPosition;
 
 
