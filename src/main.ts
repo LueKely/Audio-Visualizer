@@ -64,9 +64,9 @@ function main() {
 	const audioLoader = new THREE.AudioLoader();
 
 	let isPlayed = false;
-	audioLoader.load('./src/assets/SlickBack.mp3', (buffer) => {
+	audioLoader.load('./src/assets/III-A.mp3', (buffer) => {
 		sound.setBuffer(buffer);
-		sound.setVolume(0.2);
+		sound.setVolume(0.8);
 		canvas.addEventListener('click', () => {
 			if (isPlayed == false) {
 				sound.play();

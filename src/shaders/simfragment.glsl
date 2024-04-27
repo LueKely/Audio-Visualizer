@@ -149,7 +149,7 @@ float angle = atan(pos.y,pos.x) - info.y * 0.3 * mix(0.5,1.,circularForce);
 
 
 // the 1. there you can change it to change the number of targe radiuses
-float targetRadius = mix(info.x, 1.8, 0.5  + uFreq  * sin(angle * 1. * uFreq + time * 0.06));
+float targetRadius = mix(info.x, 1.8, 0.5    * sin(angle * 2. * 0.06));
 
 
 radius += (targetRadius - radius) *mix(0.2, 0.5,circularForce);
@@ -167,7 +167,13 @@ pos.xy += (targetPos.xy - pos.xy) * 0.1;
 
 
 
-pos.xy += curl(pos.xyz * 4., time * 0.1 , 0.1).xy * 0.005;
+
+
+float test =mix(0.003, 0.005,uFreq);
+
+pos.xy += curl(pos.xyz * 4., time * 1. , uFreq * 2.).xy * test;
+
+
 
 float dist = length(pos.xy - (mouse ));
 

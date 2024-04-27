@@ -14,10 +14,14 @@ vec4 pos = texture2D(uPositions, uv);
 
 float angle = atan(pos.y,pos.x);
 
-vColor = vec4(uv.x, uFreq, uv.y,0.55 + 0.55 * sin(angle + time )) ;
 
-vColor.y+= uFreq;
-vColor.x-= uFreq;
+vec3 colorA = vec3(0.07, 0.46, 0.91);
+vec3 colorB = vec3(0.91, 0.12, 0.24);
+float pct = uFreq;
+
+vColor = vec4(mix(colorA, colorB, pct),0.55 + 0.55 * sin(angle + time )) ;
+
+
 
 
 vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.);
