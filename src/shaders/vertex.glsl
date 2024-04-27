@@ -14,7 +14,7 @@ vec4 pos = texture2D(uPositions, uv);
 
 float angle = atan(pos.y,pos.x);
 
-vColor = vec4(uv.x, sin(time + uFreq), uv.y,0.55 + 0.55 * sin(angle + time )) ;
+vColor = vec4(uv.x, uFreq, uv.y,0.55 + 0.55 * sin(angle + time )) ;
 
 vColor.y+= uFreq;
 vColor.x-= uFreq;
