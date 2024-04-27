@@ -4,7 +4,6 @@ precision mediump float;
 
 
 uniform float time; // basically u_time
-uniform vec2 u_resolution;
 varying vec2 vUv; //the resolution
 varying vec4 vColor;
 uniform float uFreq;

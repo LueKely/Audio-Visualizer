@@ -282,24 +282,20 @@ function main() {
 
 	// animation
 	async function render() {
-		if (isPlayed == true) {
-			const frequency = analyser.getAverageFrequency() / 125;
-
-			shapeMaterial.uniforms.uFreq.value = frequency;
-			fboMaterial.uniforms.uFreq.value = frequency;
-		} else {
-			shapeMaterial.uniforms.uFreq.value = 0.1;
-			fboMaterial.uniforms.uFreq.value = 0.1;
-		}
-
-		// resizes the display
-		rayCasting();
+		// render stuff
 		if (resizeRendererToDisplaySize(renderer)) {
 			const canvas = renderer.domElement;
 			camera.aspect = canvas.width / canvas.height;
 			camera.updateProjectionMatrix();
 		}
-		requestAnimationFrame(render);
+		// analyser
+		const frequency = analyser.getAverageFrequency() / 125;
+		shapeMaterial.uniforms.uFreq.value = frequency;
+		fboMaterial.uniforms.uFreq.value = frequency;
+
+		// init raycasting
+		rayCasting();
+
 		shapeMaterial.uniforms.time.value += 0.05;
 		fboMaterial.uniforms.time.value += 0.05;
 
@@ -315,11 +311,7 @@ function main() {
 		fbo = fbo1;
 		fbo1 = temp;
 
-		if (canvas == null) {
-			throw new Error('CANVAS DOES NOT EXIST');
-		}
-		const resolution = new THREE.Vector2(canvas.width, canvas.height);
-		shapeMaterial.uniforms.u_resolution.value.copy(resolution);
+		requestAnimationFrame(render);
 	}
 
 	requestAnimationFrame(render);
