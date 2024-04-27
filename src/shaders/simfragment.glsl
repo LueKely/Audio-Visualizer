@@ -169,8 +169,8 @@ pos.xy += (targetPos.xy - pos.xy) * 0.1;
 
 
 
-
-pos.xy += curl(pos.xyz * 4., time * 1. , uFreq * 2.).xy * test;
+// dont remove this
+pos.xy += curl(pos.xyz * 4., time * 1. , 1. * 2.).xy * test;
 
 // remove this to adjust mouse
 // mouse.x+=1.5;
