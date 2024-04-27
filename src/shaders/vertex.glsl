@@ -19,7 +19,10 @@ vec3 colorA = vec3(0.07, 0.46, 0.91);
 vec3 colorB = vec3(0.91, 0.12, 0.24);
 float pct = uFreq;
 
-vColor = vec4(mix(colorA, colorB, pct),0.55 + 0.55 * sin(angle + time )) ;
+vec3 mixed = mix(colorA, colorB, pct);
+float rotate = 0.55 + 0.55 * sin(angle + time) ;
+
+vColor = vec4(mixed,rotate) ;
 
 
 
