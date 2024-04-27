@@ -174,19 +174,21 @@ function main() {
 	function rayCasting() {
 		const dummy = new THREE.Mesh(
 			new THREE.PlaneGeometry(100, 100),
-			new THREE.MeshBasicMaterial({ color: 0xffffff })
+			new THREE.MeshBasicMaterial()
 		);
 
 		// scene.add(dummy);
 
+		let rect = renderer.domElement.getBoundingClientRect();
+
 		if (canvas == null) throw new Error('Canvas not found');
 
 		canvas.addEventListener('pointermove', (e) => {
-			pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-			pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+			pointer.x = ((e.clientX - rect.left) / (rect.width - rect.left)) * 2 - 1;
+			pointer.y = -((e.clientY - rect.top) / (rect.bottom - rect.top)) * 2 + 1;
 
 			raycaster.setFromCamera(pointer, camera);
-			let intersects = raycaster.intersectObject(dummy);
+			let intersects = raycaster.intersectObject(dummy, false);
 			if (intersects.length > 0 && intersects[0].point !== undefined) {
 				let { x, y }: THREE.Vec2 = intersects[0].point;
 				fboMaterial.uniforms.uMouse.value = new THREE.Vector2(x, y);

@@ -1,7 +1,6 @@
 body {
 	margin: 0;
-	height: 100dvh;
-	width: 100dvw;
+	width: 100svw;
 	background-color: rgb(23, 23, 24);
 }
 
@@ -9,9 +8,35 @@ canvas {
 	width: 100%;
 	height: 100%;
 	display: block;
+	aspect-ratio: 3/2;
 }
 
 .canvas_wrapper {
 	width: 100%;
 	height: 100%;
+}
+
+main {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+main > section:first-child {
+	flex: 1.5;
+}
+
+main > :nth-child(2) {
+	flex: 1;
+}
+
+h1,
+h2 {
+	margin: 0;
+}
+
+header {
+	width: 100%;
 }
