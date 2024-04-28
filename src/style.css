@@ -1,15 +1,42 @@
+@import url('./assets/css/canvas.css');
+@import url('./assets/css/fonts.css');
+@import url('./assets/css/player.css');
+
+@font-face {
+	font-family: 'PPMori-Regular';
+	src: url('./assets/font/PPMori-Regular.otf');
+}
+
+@font-face {
+	font-family: 'PPMori-Extralight';
+	src: url('./assets/font/PPMori-Extralight.otf');
+}
+
+@font-face {
+	font-family: 'PPMori-SemiBold';
+	src: url('./assets/font/PPMori-SemiBold.otf');
+}
+
 :root {
 	--bg: #0b0f0d;
 	--font: #2dc954;
 }
+
+* {
+	box-sizing: border-box;
+}
+
 body {
 	height: 100svh;
 	margin: 0;
-	box-sizing: border-box;
 	background: var(--bg);
 	position: relative;
-
 	color: var(--font);
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
 }
 
 hr {
@@ -18,6 +45,7 @@ hr {
 
 svg {
 	height: 0px;
+	position: absolute;
 }
 
 body::before,
@@ -37,58 +65,10 @@ body::before {
 	filter: url(#noiseFilter);
 }
 
-canvas {
-	width: 100%;
-	height: 100%;
-	display: block;
-}
-.canvas_wrapper {
-	width: 100%;
-	height: 100%;
-	aspect-ratio: 3/2;
-}
-
 main {
 	width: 100%;
-
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-}
-
-main > section:first-child {
-	flex: 1.5;
-}
-
-main > :nth-child(2) {
-	flex: 1;
-}
-
-h1,
-h2 {
-	margin: 0;
-}
-
-header {
-	width: 100%;
-}
-
-.circle {
-	position: absolute;
-	background-color: rgb(34, 194, 106);
-
-	width: 100px;
-	height: 100px;
-	filter: blur(150px);
-	border-radius: 100px;
-}
-
-.one {
-	left: 0;
-	top: 0;
-}
-
-.two {
-	bottom: 0;
-	right: 0;
 }
