@@ -38,3 +38,83 @@ header {
 	width: 100%;
 	padding: 1rem;
 }
+
+.slider_wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 1rem;
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.slider_wrapper > * {
+	width: 6rem;
+
+	text-align: center;
+}
+
+.slider_wrapper > li:hover {
+	cursor: pointer;
+}
+
+.line_wrapper {
+	user-select: none;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	flex-direction: column;
+	/* background-color: red; */
+}
+.line {
+	transition: transform ease-out 150ms;
+	width: 6rem;
+	height: 0.1rem;
+	background-color: var(--font);
+	animation-name: poopOverReverse;
+	animation-duration: 350ms;
+	animation-fill-mode: forwards;
+}
+
+.moveRight {
+	transition: transform ease-out 150ms;
+	animation-name: poopOver;
+	animation-duration: 350ms;
+	animation-fill-mode: forwards;
+}
+
+@keyframes poopOver {
+	0% {
+		width: 6rem;
+	}
+
+	10%,
+	20% {
+		width: 8rem;
+	}
+
+	100% {
+		width: 6rem;
+		transform: translateX(7rem);
+	}
+}
+
+@keyframes poopOverReverse {
+	0% {
+		width: 6rem;
+		transform: translateX(7rem);
+	}
+
+	40%,
+	60%,
+	50% {
+		width: 8rem;
+	}
+
+	100% {
+		width: 6rem;
+		transform: translateX(0rem);
+	}
+}

@@ -289,9 +289,9 @@ function main() {
 			camera.updateProjectionMatrix();
 		}
 		// analyser
-		const frequency = analyser.getAverageFrequency() / 125;
-		shapeMaterial.uniforms.uFreq.value = frequency;
-		fboMaterial.uniforms.uFreq.value = frequency;
+		// const frequency = analyser.getAverageFrequency() / 125;
+		// shapeMaterial.uniforms.uFreq.value = frequency;
+		// fboMaterial.uniforms.uFreq.value = frequency;
 
 		// init raycasting
 		rayCasting();
