@@ -20,7 +20,7 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 }
 
 const audioContext = new AudioContext();
-const audioElement = document.querySelector('audio');
+const audioElement = document.querySelector('#I');
 
 // Check if audioContext or audio element is properly initialized
 if (!audioContext || !audioElement) {
@@ -56,29 +56,6 @@ function main() {
 
 	//camera position
 	camera.position.z = 3;
-
-	// audio shit
-	const audioListener = new THREE.AudioListener();
-	camera.add(audioListener);
-	const sound = new THREE.Audio(audioListener);
-	const audioLoader = new THREE.AudioLoader();
-
-	let isPlayed = false;
-	audioLoader.load('./src/assets/III-A.mp3', (buffer) => {
-		sound.setBuffer(buffer);
-		sound.setVolume(0.8);
-		canvas.addEventListener('click', () => {
-			if (isPlayed == false) {
-				sound.play();
-				isPlayed = true;
-			} else {
-				sound.pause();
-				isPlayed = false;
-			}
-		});
-	});
-
-	const analyser = new THREE.AudioAnalyser(sound, 256);
 
 	//scene
 	const scene = new THREE.Scene();
@@ -288,8 +265,7 @@ function main() {
 			camera.aspect = canvas.width / canvas.height;
 			camera.updateProjectionMatrix();
 		}
-		// analyser
-		// const frequency = analyser.getAverageFrequency() / 125;
+
 		// shapeMaterial.uniforms.uFreq.value = frequency;
 		// fboMaterial.uniforms.uFreq.value = frequency;
 

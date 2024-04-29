@@ -67,6 +67,7 @@ header {
 	justify-content: center;
 	flex-direction: column;
 	/* background-color: red; */
+	margin-bottom: 2rem;
 }
 .line {
 	transition: transform ease-out 150ms;
@@ -83,6 +84,22 @@ header {
 	animation-name: poopOver;
 	animation-duration: 350ms;
 	animation-fill-mode: forwards;
+}
+
+.hide {
+	animation-name: hide;
+	animation-duration: 150ms;
+	animation-fill-mode: forwards;
+}
+
+.unhide {
+	animation-name: unhide;
+	animation-duration: 150ms;
+	animation-fill-mode: forwards;
+}
+
+.articleList {
+	opacity: 0%;
 }
 
 @keyframes poopOver {
@@ -116,5 +133,25 @@ header {
 	100% {
 		width: 6rem;
 		transform: translateX(0rem);
+	}
+}
+
+@keyframes hide {
+	0% {
+		opacity: 100%;
+	}
+
+	100% {
+		opacity: 0%;
+	}
+}
+
+@keyframes unhide {
+	0% {
+		opacity: 0%;
+	}
+
+	100% {
+		opacity: 100%;
 	}
 }

@@ -15,7 +15,7 @@ vec4 pos = texture2D(uPositions, uv);
 float angle = atan(pos.y,pos.x);
 
 
-vec3 colorA = vec3(0.75, 0.94, 0.07);
+vec3 colorA = vec3(0.176,0.788,0.329);
 vec3 colorB = vec3(0.07, 0.93, 0.25);
 float pct = uFreq;
 
