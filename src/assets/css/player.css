@@ -24,14 +24,15 @@ header {
 }
 
 .player_wrapper {
-	flex: 0.6;
+	flex: 1;
 	height: 100%;
 	padding-right: 1rem;
 }
 
 .canvas_wrapper {
-	flex: 1;
+	flex: 1.5;
 	height: 100%;
+	width: 100%;
 }
 
 .audio_control {
@@ -77,6 +78,7 @@ header {
 	animation-name: poopOverReverse;
 	animation-duration: 350ms;
 	animation-fill-mode: forwards;
+	animation-timing-function: ease-in;
 }
 
 .moveRight {
@@ -84,18 +86,21 @@ header {
 	animation-name: poopOver;
 	animation-duration: 350ms;
 	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
 }
 
 .hide {
 	animation-name: hide;
 	animation-duration: 150ms;
 	animation-fill-mode: forwards;
+	animation-timing-function: ease-in-out;
 }
 
 .unhide {
 	animation-name: unhide;
 	animation-duration: 150ms;
 	animation-fill-mode: forwards;
+	animation-timing-function: ease-in-out;
 }
 
 .articleList {
@@ -106,9 +111,9 @@ header {
 	0% {
 		width: 6rem;
 	}
-
-	10%,
-	20% {
+	40%,
+	60%,
+	50% {
 		width: 8rem;
 	}
 
