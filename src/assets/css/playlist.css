@@ -47,6 +47,10 @@
 	right: 0%;
 }
 
+.track_wrapper > li:hover {
+	cursor: pointer;
+}
+
 .track_wrapper > li:hover > p,
 .track_wrapper > li:hover > .play > p {
 	transition: all ease-in-out 350ms;
@@ -58,4 +62,8 @@
 	position: fixed;
 	left: 0;
 	bottom: 0;
+}
+
+.nowPlaying {
+	opacity: 0;
 }

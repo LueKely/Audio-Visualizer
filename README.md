@@ -6,5 +6,6 @@ PROGRAMMING SIDEL
 
 UI
 
-- Gradient thingy
-- noise texture thingy
+- time & now playing
+- Gradient thingy done
+- noise texture thingy done

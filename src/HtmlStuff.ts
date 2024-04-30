@@ -6,6 +6,8 @@ function renderHtml() {
 	const trackList = document.querySelector('.musicList');
 	const articleList = document.querySelector('.articleList');
 
+	const nowPlaying = document.querySelectorAll('.nowPlaying');
+	const trackItem = document.querySelectorAll('.trackItem');
 	aboutBtn?.addEventListener('click', () => {
 		if (line?.classList.contains('.moveRight')) return;
 		// when i clic kthe about button the other text must hide
@@ -36,6 +38,30 @@ function renderHtml() {
 			document.getElementById('articleList')!.style.display = 'none';
 			document.getElementById('trackList')!.style.display = 'block';
 		}, 150);
+	});
+
+	// nowPlaying.forEach((element) => {
+	// 	element.addEventListener('click', (e) => {
+	// 		nowPlaying.forEach((tag) => {
+	// 			tag.classList.remove('unhide');
+	// 		});
+
+	// 		element.classList.add('unhide');
+	// 	});
+	// });
+
+	console.log(trackItem.length);
+
+	trackItem.forEach((track, index) => {
+		track.addEventListener('click', () => {
+			console.log('test');
+
+			nowPlaying.forEach((tag) => {
+				tag.classList.remove('unhide');
+			});
+
+			nowPlaying[index].classList.add('unhide');
+		});
 	});
 }
 
