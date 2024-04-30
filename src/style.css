@@ -17,6 +17,11 @@
 	src: url('./assets/font/PPMori-SemiBold.otf');
 }
 
+@font-face {
+	font-family: 'PPMori-ExtralightItalic';
+	src: url('./assets/font/PPMori-ExtralightItalic.otf');
+}
+
 :root {
 	--bg: #0b0f0d;
 	--font: #2dc954;

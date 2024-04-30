@@ -1,18 +1,13 @@
 function renderHtml() {
-	const tabs = document.querySelector('.line_wrapper');
 	const line = document.querySelector('.line');
 	const aboutBtn = document.querySelector('#About');
 	const trackBtn = document.querySelector('#Track');
 	const trackList = document.querySelector('.musicList');
 	const articleList = document.querySelector('.articleList');
-
+	const time = document.querySelectorAll('.time');
 	const nowPlaying = document.querySelectorAll('.nowPlaying');
 	const trackItem = document.querySelectorAll('.trackItem');
 	const Tracks = document.querySelectorAll('audio');
-
-	const track1 = Tracks[0];
-
-	console.log(track1.duration);
 
 	aboutBtn?.addEventListener('click', () => {
 		if (line?.classList.contains('.moveRight')) return;
@@ -55,22 +50,26 @@ function renderHtml() {
 			nowPlaying[index].classList.add('unhide');
 		});
 	});
+
+	time.forEach((timeItem, index) => {
+		timeItem.textContent = formatSecondsAsTime(Tracks[index]?.duration);
+	});
 }
 
-// not working yet
-function formatSecondsAsTime(secs: number) {
-	let hr = Math.floor(secs / 3600);
-	let min = Math.floor((secs - hr * 3600) / 60);
-	let sec = Math.floor(secs - hr * 3600 - min * 60);
+function str_pad_left(string: string, pad: string, length: number) {
+	return (new Array(length + 1).join(pad) + string).slice(-length);
+}
 
-	if (min < 10) {
-		min = '0' + min;
-	}
-	if (sec < 10) {
-		sec = '0' + sec;
-	}
+function formatSecondsAsTime(time: number) {
+	const minutes = Math.floor(time / 60);
+	const minuteString = minutes.toString();
 
-	return min + ':' + sec;
+	const sec = time - minutes * 60;
+	const secString = sec.toLocaleString();
+
+	return (
+		str_pad_left(minuteString, '0', 2) + ':' + str_pad_left(secString, '0', 2)
+	);
 }
 
 renderHtml();
