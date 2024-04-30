@@ -8,6 +8,8 @@ function renderHtml() {
 
 	const nowPlaying = document.querySelectorAll('.nowPlaying');
 	const trackItem = document.querySelectorAll('.trackItem');
+	const music = document.querySelectorAll('audio');
+
 	aboutBtn?.addEventListener('click', () => {
 		if (line?.classList.contains('.moveRight')) return;
 		// when i clic kthe about button the other text must hide
@@ -40,19 +42,7 @@ function renderHtml() {
 		}, 150);
 	});
 
-	// nowPlaying.forEach((element) => {
-	// 	element.addEventListener('click', (e) => {
-	// 		nowPlaying.forEach((tag) => {
-	// 			tag.classList.remove('unhide');
-	// 		});
-
-	// 		element.classList.add('unhide');
-	// 	});
-	// });
-
-	console.log(trackItem.length);
-
-	trackItem.forEach((track, index) => {
+	trackItem?.forEach((track, index) => {
 		track.addEventListener('click', () => {
 			console.log('test');
 
