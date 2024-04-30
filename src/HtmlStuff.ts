@@ -8,7 +8,11 @@ function renderHtml() {
 
 	const nowPlaying = document.querySelectorAll('.nowPlaying');
 	const trackItem = document.querySelectorAll('.trackItem');
-	const music = document.querySelectorAll('audio');
+	const Tracks = document.querySelectorAll('audio');
+
+	const track1 = Tracks[0];
+
+	console.log(track1.duration);
 
 	aboutBtn?.addEventListener('click', () => {
 		if (line?.classList.contains('.moveRight')) return;
@@ -44,8 +48,6 @@ function renderHtml() {
 
 	trackItem?.forEach((track, index) => {
 		track.addEventListener('click', () => {
-			console.log('test');
-
 			nowPlaying.forEach((tag) => {
 				tag.classList.remove('unhide');
 			});
@@ -53,6 +55,22 @@ function renderHtml() {
 			nowPlaying[index].classList.add('unhide');
 		});
 	});
+}
+
+// not working yet
+function formatSecondsAsTime(secs: number) {
+	let hr = Math.floor(secs / 3600);
+	let min = Math.floor((secs - hr * 3600) / 60);
+	let sec = Math.floor(secs - hr * 3600 - min * 60);
+
+	if (min < 10) {
+		min = '0' + min;
+	}
+	if (sec < 10) {
+		sec = '0' + sec;
+	}
+
+	return min + ':' + sec;
 }
 
 renderHtml();
