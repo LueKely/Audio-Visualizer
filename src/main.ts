@@ -18,20 +18,45 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	}
 	return needResize;
 }
+// audio ctx
+const trackWrapper = document.querySelectorAll('.trackItem');
 
 const audioContext = new AudioContext();
-const audioElement = document.querySelector('#I');
+const audioElement: NodeListOf<HTMLAudioElement> =
+	document.querySelectorAll('audio');
 
-// Check if audioContext or audio element is properly initialized
-if (!audioContext || !audioElement) {
-	throw new Error('AudioContext is not supported');
-}
+const trackList = Array.from(audioElement).map((elem) => {
+	return audioContext.createMediaElementSource(elem);
+});
+
+// analyser stuff
+const analyser = audioContext.createAnalyser();
+analyser.fftSize = 256;
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
+// connecting stuff
+
+trackWrapper.forEach((wrapper, index) => {
+	wrapper.addEventListener('click', () => {
+		trackList[index].connect(audioContext.destination);
+		trackList[index].connect(analyser);
+		audioElement[index].play();
+
+		// disconnects all other tracks that isnt this one
+		trackList.forEach((track, kindex) => {
+			if (track.context != null && kindex != index) {
+				track.disconnect(audioContext.destination);
+				track.disconnect(analyser);
+				audioElement[kindex].pause();
+				audioElement[kindex].currentTime = 0;
+			}
+			return;
+		});
+	});
+});
 
 function main() {
-	if (!audioContext || !audioElement) {
-		throw new Error('AudioContext is not supported');
-	}
-
 	const canvas: HTMLCanvasElement | null =
 		document.querySelector<HTMLCanvasElement>('canvas');
 
@@ -259,6 +284,11 @@ function main() {
 
 	// animation
 	async function render() {
+		// audio
+		// analyser.getByteTimeDomainData(dataArray);
+
+		// console.log(dataArray);
+
 		// render stuff
 		if (resizeRendererToDisplaySize(renderer)) {
 			const canvas = renderer.domElement;
