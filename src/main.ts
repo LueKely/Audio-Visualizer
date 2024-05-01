@@ -284,10 +284,9 @@ function main() {
 
 	// animation
 	async function render() {
-		// audio
-		// analyser.getByteTimeDomainData(dataArray);
+		analyser.getByteTimeDomainData(dataArray);
 
-		// console.log(dataArray);
+		console.log(dataArray);
 
 		// render stuff
 		if (resizeRendererToDisplaySize(renderer)) {
