@@ -11,5 +11,4 @@ UI
 - time & now playing done
 - Gradient thingy done
 - noise texture thingy done
-
-- music player
+- music player will do huhuh
