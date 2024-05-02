@@ -3,7 +3,7 @@ TODO:
 PROGRAMMING SIDEL
 
 - turn audio to audio using web audio api done
-  - get average of frequency - will do this
+  - get average of frequency - done
 - return the shader back to once it was done
 
 UI

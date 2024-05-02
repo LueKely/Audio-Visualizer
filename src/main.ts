@@ -46,8 +46,7 @@ trackWrapper.forEach((wrapper, index) => {
 		// disconnects all other tracks that isnt this one
 		trackList.forEach((track, kindex) => {
 			if (track.context != null && kindex != index) {
-				track.disconnect(audioContext.destination);
-				track.disconnect(analyser);
+				track.disconnect();
 				audioElement[kindex].pause();
 				audioElement[kindex].currentTime = 0;
 			}
@@ -98,7 +97,6 @@ function main() {
 		wireframe: false,
 		side: THREE.DoubleSide,
 		uniforms: {
-			uFreq: { value: 0.5 },
 			u_resolution: {
 				value: new THREE.Vector2(),
 			}, // This will be automatically set by Three.js
@@ -237,9 +235,6 @@ function main() {
 
 	// fbo ends
 
-	// time
-	const clock = new THREE.Clock();
-
 	function getRenderTarget() {
 		if (canvas === null) {
 			throw new Error('CANVAS ELEMENT DOES NOT EXIST');
@@ -283,7 +278,14 @@ function main() {
 	scene.add(points);
 
 	// animation
-	async function render() {
+	function render() {
+		// render stuff
+		if (resizeRendererToDisplaySize(renderer)) {
+			const canvas = renderer.domElement;
+			camera.aspect = canvas.width / canvas.height;
+			camera.updateProjectionMatrix();
+		}
+
 		analyser.getByteFrequencyData(dataArray);
 
 		const poop = dataArray.reduce(
@@ -293,14 +295,6 @@ function main() {
 		const average = poop / 256;
 		const normalize = average / 50;
 
-		// render stuff
-		if (resizeRendererToDisplaySize(renderer)) {
-			const canvas = renderer.domElement;
-			camera.aspect = canvas.width / canvas.height;
-			camera.updateProjectionMatrix();
-		}
-
-		shapeMaterial.uniforms.uFreq.value = normalize;
 		fboMaterial.uniforms.uFreq.value = normalize;
 
 		// init raycasting
