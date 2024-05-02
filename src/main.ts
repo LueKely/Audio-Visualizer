@@ -31,7 +31,7 @@ const trackList = Array.from(audioElement).map((elem) => {
 
 // analyser stuff
 const analyser = audioContext.createAnalyser();
-analyser.fftSize = 256;
+analyser.fftSize = 512;
 const bufferLength = analyser.frequencyBinCount;
 const dataArray = new Uint8Array(bufferLength);
 
@@ -98,7 +98,7 @@ function main() {
 		wireframe: false,
 		side: THREE.DoubleSide,
 		uniforms: {
-			uFreq: { value: 0.0 },
+			uFreq: { value: 0.5 },
 			u_resolution: {
 				value: new THREE.Vector2(),
 			}, // This will be automatically set by Three.js
@@ -123,7 +123,7 @@ function main() {
 	let fbo = getRenderTarget();
 	let fbo1 = getRenderTarget();
 	// 256 dati
-	const size = 128;
+	const size = 256;
 	const fboScene = new THREE.Scene();
 	const fboCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 	fboCamera.position.set(0, 0, 0.5);
@@ -161,7 +161,7 @@ function main() {
 			uPositions: { value: fboTexture },
 			uInfo: { value: null },
 			time: { value: 0 },
-			uFreq: { value: 0.0 },
+			uFreq: { value: 0.05 },
 			uMouse: { value: new THREE.Vector2(0, 0) },
 			resolution: { value: new THREE.Vector4() },
 		},
@@ -284,9 +284,14 @@ function main() {
 
 	// animation
 	async function render() {
-		analyser.getByteTimeDomainData(dataArray);
+		analyser.getByteFrequencyData(dataArray);
 
-		console.log(dataArray);
+		const poop = dataArray.reduce(
+			(accumulator, currentValue) => accumulator + currentValue,
+			0
+		);
+		const average = poop / 256;
+		const normalize = average / 50;
 
 		// render stuff
 		if (resizeRendererToDisplaySize(renderer)) {
@@ -295,8 +300,8 @@ function main() {
 			camera.updateProjectionMatrix();
 		}
 
-		// shapeMaterial.uniforms.uFreq.value = frequency;
-		// fboMaterial.uniforms.uFreq.value = frequency;
+		shapeMaterial.uniforms.uFreq.value = normalize;
+		fboMaterial.uniforms.uFreq.value = normalize;
 
 		// init raycasting
 		rayCasting();

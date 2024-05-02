@@ -28,7 +28,7 @@ vColor = vec4(mixed,rotate) ;
 
 
 vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.);
-gl_PointSize = 1. * (5./ - mvPosition.z);
+gl_PointSize = 1. * (1./ - mvPosition.z);
 gl_Position = projectionMatrix * mvPosition;
 
 
