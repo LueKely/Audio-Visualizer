@@ -118,8 +118,7 @@ function main() {
 	light.position.set(-1, 2, 4);
 	scene.add(light);
 
-	// //shape
-	// const geo = new THREE.PlaneGeometry(35, 35, 30, 30);
+
 	const shapeMaterial = new THREE.ShaderMaterial({
 		wireframe: false,
 		side: THREE.DoubleSide,
@@ -138,8 +137,6 @@ function main() {
 	// uniform variables
 	const canvasSize = new THREE.Vector2(canvas.width, canvas.height);
 	shapeMaterial.uniforms.u_resolution.value.copy(canvasSize);
-
-	// scene.add(Mesh);
 
 	// renderer
 	renderer.render(scene, camera);
@@ -306,7 +303,7 @@ function main() {
 
 	// animation
 	function render() {
-		// render stuff
+		rayCasting();
 		if (resizeRendererToDisplaySize(renderer)) {
 			const canvas = renderer.domElement;
 			camera.aspect = canvas.width / canvas.height;
