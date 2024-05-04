@@ -6,7 +6,7 @@ this is an audio visualizer for Steve Reich's composition, "Music For 18 Musicia
 
 ## Tech:
 - Three.js
-- GSLS
+- GLSL
 - Javascript
 
 ## Acknowledgements:
