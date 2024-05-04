@@ -1,14 +1,19 @@
-TODO:
+# MF18 (Music For 18 Musicians)
+by: LueKely (that's me!)
 
-PROGRAMMING SIDEL
+## About
+this is an audio visualizer for Steve Reich's composition, "Music For 18 Musicians".
 
-- turn audio to audio using web audio api done
-  - get average of frequency - done
-- return the shader back to once it was done
+## Tech:
+- Three.js
+- GSLS
+- Javascript
 
-UI
+## Acknowledgements:
+- this has terrible performance
+- this has **NO MOBILE VIEW** (i hate mobile view 💢)
+- I have not done this with the help of ![Yuri Aktiuikh's](https://www.youtube.com/@akella_) streams about FBO particles
+  
+## Snapshot:
+![alt text](https://github.com/LueKely/Audio-Visualizer/blob/main/public/snapshot.webp)
 
-- time & now playing done
-- Gradient thingy done
-- noise texture thingy done
-- music player will do huhuh
