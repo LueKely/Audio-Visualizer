@@ -53,6 +53,7 @@
 
 .timer_wrapper {
 	z-index: 1;
+	width: 5rem;
 }
 
 .track_wrapper > li:hover > p,
