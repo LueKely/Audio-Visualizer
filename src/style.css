@@ -2,6 +2,7 @@
 @import url('./assets/css/fonts.css');
 @import url('./assets/css/player.css');
 @import url('./assets/css/playlist.css');
+@import url('./assets/css/audioControl.css');
 @font-face {
 	font-family: 'PPMori-Regular';
 	src: url('./assets/font/PPMori-Regular.otf');

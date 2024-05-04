@@ -35,11 +35,6 @@ header {
 	width: 100%;
 }
 
-.audio_control {
-	width: 100%;
-	padding: 1rem;
-}
-
 .slider_wrapper {
 	position: relative;
 	display: flex;

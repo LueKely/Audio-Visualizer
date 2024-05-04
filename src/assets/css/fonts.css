@@ -6,7 +6,8 @@ h2 {
 
 p,
 a,
-li {
+li,
+label {
 	font-size: 1.4rem;
 	font-family: 'PPMori-Extralight';
 }

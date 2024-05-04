@@ -6,6 +6,7 @@ import fragment from './shaders/fragment.frag';
 import vertex from './shaders/vertex.glsl';
 import simvertex from './shaders/simvert.glsl';
 import simfragment from './shaders/simfragment.glsl';
+import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
 function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	const canvas = renderer.domElement;
@@ -19,7 +20,11 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	return needResize;
 }
 // audio ctx
+const nowPlaying = document.querySelectorAll('.nowPlaying');
 const trackWrapper = document.querySelectorAll('.trackItem');
+const volumeSlider: HTMLInputElement = document.getElementById(
+	'volume-slider'
+) as HTMLInputElement;
 
 const audioContext = new AudioContext();
 const audioElement: NodeListOf<HTMLAudioElement> =
@@ -41,7 +46,14 @@ trackWrapper.forEach((wrapper, index) => {
 	wrapper.addEventListener('click', () => {
 		trackList[index].connect(audioContext.destination);
 		trackList[index].connect(analyser);
-		audioElement[index].play();
+
+		if (!audioElement[index].paused) {
+			audioElement[index].pause();
+			nowPlaying[index].textContent = 'paused';
+		} else {
+			audioElement[index].play();
+			nowPlaying[index].textContent = 'now playing';
+		}
 
 		// disconnects all other tracks that isnt this one
 		trackList.forEach((track, kindex) => {
@@ -50,10 +62,26 @@ trackWrapper.forEach((wrapper, index) => {
 				audioElement[kindex].pause();
 				audioElement[kindex].currentTime = 0;
 			}
+
 			return;
 		});
 	});
 });
+
+if (volumeSlider !== null) {
+	audioElement.forEach((element) => {
+		element.volume = Number(volumeSlider.value) * 0.01;
+	});
+
+	volumeSlider.addEventListener('input', () => {
+		const value = volumeSlider.value;
+		audioElement.forEach((element) => {
+			element.volume = Number(value) * 0.01;
+		});
+	});
+} else {
+	console.error('Element with ID "volume-slider" not found');
+}
 
 function main() {
 	const canvas: HTMLCanvasElement | null =

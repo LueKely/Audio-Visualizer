@@ -58,12 +58,6 @@
 	color: var(--bg);
 }
 
-.audio_control {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-}
-
 .nowPlaying {
 	opacity: 0;
 }

@@ -1,0 +1,40 @@
+.audio_control {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 1rem;
+	z-index: 1;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+}
+
+#volume-slider {
+	width: 150px;
+	height: 20px;
+	background-color: rgba(255, 0, 0, 0);
+}
+
+input[type='range']::-moz-range-track {
+	cursor: pointer;
+	background: #2dc95469;
+}
+
+input[type='range']::-moz-range-thumb {
+	cursor: pointer;
+	background-color: var(--font);
+	border: none;
+	cursor: pointer;
+}
+
+input[type='range']:active::-moz-range-thumb {
+	transform: scale(1.2);
+}
+
+input[type='range']::-moz-range-progress {
+	background-color: var(--font);
+}
+input[type='range']::-moz-focus-outer {
+	border: 0;
+}
