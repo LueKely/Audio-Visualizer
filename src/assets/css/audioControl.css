@@ -14,7 +14,9 @@
 	width: 150px;
 	height: 20px;
 	background-color: rgba(255, 0, 0, 0);
+	-webkit-appearance: none;
 }
+/* mozilla support */
 
 input[type='range']::-moz-range-track {
 	cursor: pointer;
@@ -25,7 +27,6 @@ input[type='range']::-moz-range-thumb {
 	cursor: pointer;
 	background-color: var(--font);
 	border: none;
-	cursor: pointer;
 }
 
 input[type='range']:active::-moz-range-thumb {
@@ -37,4 +38,26 @@ input[type='range']::-moz-range-progress {
 }
 input[type='range']::-moz-focus-outer {
 	border: 0;
+}
+
+/* webkit */
+input[type='range']::-webkit-slider-thumb {
+	position: relative;
+	-webkit-appearance: none;
+	box-sizing: content-box;
+
+	height: 15px;
+	width: 15px;
+	border-radius: 50%;
+	background-color: var(--font);
+	cursor: pointer;
+	margin: -5px 0 0 0;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+	cursor: pointer;
+	background: #2dc95469;
+	border: none;
+
+	height: 3px;
 }
