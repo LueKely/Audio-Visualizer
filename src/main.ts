@@ -51,7 +51,7 @@ function main() {
 	scene.add(light);
 
 	//shape
-	const geo = new THREE.PlaneGeometry(35, 35, 30, 30);
+	// const geo = new THREE.PlaneGeometry(35, 35, 30, 30);
 	const shapeMaterial = new THREE.ShaderMaterial({
 		wireframe: false,
 		side: THREE.DoubleSide,
@@ -71,7 +71,7 @@ function main() {
 	const canvasSize = new THREE.Vector2(canvas.width, canvas.height);
 	shapeMaterial.uniforms.u_resolution.value.copy(canvasSize);
 
-	const Mesh = new THREE.Mesh(geo, shapeMaterial);
+	// const Mesh = new THREE.Mesh(geo, shapeMaterial);
 
 	// scene.add(Mesh);
 
@@ -189,7 +189,7 @@ function main() {
 	// fbo ends
 
 	// time
-	const clock = new THREE.Clock();
+	// const clock = new THREE.Clock();
 
 	function getRenderTarget() {
 		if (canvas === null) {
@@ -235,7 +235,7 @@ function main() {
 
 	// animation
 	function render() {
-		const deltaTime = clock.getDelta();
+		// const deltaTime = clock.getDelta();
 		// resizes the display
 		rayCasting();
 		if (resizeRendererToDisplaySize(renderer)) {
