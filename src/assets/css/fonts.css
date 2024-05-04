@@ -1,0 +1,29 @@
+h1,
+h2 {
+	margin: 0;
+	font-family: 'PPMori-Regular';
+}
+
+p,
+a,
+li,
+label {
+	font-size: 1.4rem;
+	font-family: 'PPMori-Extralight';
+}
+
+p {
+	text-indent: 20px;
+}
+
+h1 {
+	font-size: 2.2rem;
+}
+
+h2 {
+	font-size: 1.75rem;
+}
+
+.nowPlaying {
+	font-family: 'PPMori-ExtralightItalic';
+}

@@ -4,11 +4,95 @@
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite + TS</title>
+		<title>MF18M</title>
 	</head>
 	<body>
-		<canvas class="canvas"></canvas>
+		<header>
+			<h1>Music For 18 Musicians</h1>
+		</header>
+
+		<main>
+			<section class="canvas_wrapper"><canvas class="canvas"></canvas></section>
+			<section class="player_wrapper">
+				<div class="line_wrapper">
+					<ul class="slider_wrapper">
+						<li id="Track"><h2>Tracks</h2></li>
+						<li id="About"><h2>About</h2></li>
+					</ul>
+					<div class="line"></div>
+				</div>
+
+				<div class="musicList" id="trackList">
+					<ol class="track_wrapper" type="1">
+						<li class="trackItem">
+							<span class="play">
+								<p>1. Section I - Pulses</p>
+							</span>
+							<p class="nowPlaying">now playing</p>
+							<div class="timer_wrapper"><p class="time">time</p></div>
+							<div class="rect"></div>
+						</li>
+						<li class="trackItem">
+							<span class="play"> <p>2. Section III</p></span>
+							<p class="nowPlaying">now playing</p>
+							<div class="timer_wrapper"><p class="time">time</p></div>
+
+							<div class="rect"></div>
+						</li>
+					</ol>
+				</div>
+
+				<div class="articleList" id="articleList">
+					<p>
+						MF18M is an audio visualizer for the work of minimalist music
+						composed by Steve Reich during 1974-1976 called “Music For 18
+						Musicians”.
+					</p>
+					<p>
+						The composition is scored for a mixed ensemble that includes four
+						pianos, four female voices, three marimbas, two xylophones, two
+						metallophones, a violin, a cello, and a clarinet or bass clarinet.
+					</p>
+					<p>
+						The music is organized into 11 sections, which are not explicitly
+						marked but are characterized by distinct rhythmic and harmonic
+						changes. The sections often flow seamlessly into one another,
+						creating a continuous and immersive listening experience.
+					</p>
+				</div>
+			</section>
+		</main>
+
+		<div class="audio_control">
+			<label for="volume-slider">volume &nbsp;</label>
+			<input
+				type="range"
+				name="volume-slider"
+				id="volume-slider"
+				min="0"
+				max="100"
+				value="100"
+				autocomplete="off"
+			/>
+		</div>
+
+		<div class="circle one"></div>
+		<div class="circle two"></div>
+
+		<svg>
+			<filter hidden id="noiseFilter">
+				<feTurbulence
+					type="fractalNoise"
+					baseFrequency="0.6"
+					stitchTiles="stitch"
+				/>
+			</filter>
+		</svg>
+
+		<audio id="I" src="/src/assets/I-Pulses.mp3"></audio>
+		<audio src="/src/assets/III-A.mp3"></audio>
 	</body>
 
 	<script type="module" src="/src/main.ts"></script>
+	<script type="module" src="/src/HtmlStuff.ts"></script>
 </html>

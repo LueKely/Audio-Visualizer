@@ -6,6 +6,7 @@ import fragment from './shaders/fragment.frag';
 import vertex from './shaders/vertex.glsl';
 import simvertex from './shaders/simvert.glsl';
 import simfragment from './shaders/simfragment.glsl';
+
 function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	const canvas = renderer.domElement;
 	const pixelRatio = window.devicePixelRatio;
@@ -16,6 +17,69 @@ function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 		renderer.setSize(width, height, false);
 	}
 	return needResize;
+}
+// audio ctx
+const nowPlaying = document.querySelectorAll('.nowPlaying');
+const trackWrapper = document.querySelectorAll('.trackItem');
+const volumeSlider: HTMLInputElement = document.getElementById(
+	'volume-slider'
+) as HTMLInputElement;
+
+const audioContext = new AudioContext();
+const audioElement: NodeListOf<HTMLAudioElement> =
+	document.querySelectorAll('audio');
+
+const trackList = Array.from(audioElement).map((elem) => {
+	return audioContext.createMediaElementSource(elem);
+});
+
+// analyser stuff
+const analyser = audioContext.createAnalyser();
+analyser.fftSize = 512;
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
+// connecting stuff
+
+trackWrapper.forEach((wrapper, index) => {
+	wrapper.addEventListener('click', () => {
+		trackList[index].connect(audioContext.destination);
+		trackList[index].connect(analyser);
+
+		if (!audioElement[index].paused) {
+			audioElement[index].pause();
+			nowPlaying[index].textContent = 'paused';
+		} else {
+			audioElement[index].play();
+			nowPlaying[index].textContent = 'now playing';
+		}
+
+		// disconnects all other tracks that isnt this one
+		trackList.forEach((track, kindex) => {
+			if (track.context != null && kindex != index) {
+				track.disconnect();
+				audioElement[kindex].pause();
+				audioElement[kindex].currentTime = 0;
+			}
+
+			return;
+		});
+	});
+});
+
+if (volumeSlider !== null) {
+	audioElement.forEach((element) => {
+		element.volume = Number(volumeSlider.value) * 0.01;
+	});
+
+	volumeSlider.addEventListener('input', () => {
+		const value = volumeSlider.value;
+		audioElement.forEach((element) => {
+			element.volume = Number(value) * 0.01;
+		});
+	});
+} else {
+	console.error('Element with ID "volume-slider" not found');
 }
 
 function main() {
@@ -28,7 +92,11 @@ function main() {
 	}
 
 	// rederer
-	const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+	const renderer = new THREE.WebGLRenderer({
+		antialias: true,
+		canvas,
+		alpha: true,
+	});
 
 	// camera
 	const fov = 75;
@@ -50,8 +118,7 @@ function main() {
 	light.position.set(-1, 2, 4);
 	scene.add(light);
 
-	//shape
-	// const geo = new THREE.PlaneGeometry(35, 35, 30, 30);
+
 	const shapeMaterial = new THREE.ShaderMaterial({
 		wireframe: false,
 		side: THREE.DoubleSide,
@@ -71,16 +138,13 @@ function main() {
 	const canvasSize = new THREE.Vector2(canvas.width, canvas.height);
 	shapeMaterial.uniforms.u_resolution.value.copy(canvasSize);
 
-	// const Mesh = new THREE.Mesh(geo, shapeMaterial);
-
-	// scene.add(Mesh);
-
 	// renderer
 	renderer.render(scene, camera);
 
 	// fbo shit starts here
 	let fbo = getRenderTarget();
 	let fbo1 = getRenderTarget();
+	// 256 dati
 	const size = 256;
 	const fboScene = new THREE.Scene();
 	const fboCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
@@ -119,6 +183,7 @@ function main() {
 			uPositions: { value: fboTexture },
 			uInfo: { value: null },
 			time: { value: 0 },
+			uFreq: { value: 0.05 },
 			uMouse: { value: new THREE.Vector2(0, 0) },
 			resolution: { value: new THREE.Vector4() },
 		},
@@ -136,12 +201,18 @@ function main() {
 			new THREE.MeshBasicMaterial()
 		);
 
-		document.addEventListener('pointermove', (e) => {
-			pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-			pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+		// scene.add(dummy);
+
+		let rect = renderer.domElement.getBoundingClientRect();
+
+		if (canvas == null) throw new Error('Canvas not found');
+
+		canvas.addEventListener('pointermove', (e) => {
+			pointer.x = ((e.clientX - rect.left) / (rect.width - rect.left)) * 2 - 1;
+			pointer.y = -((e.clientY - rect.top) / (rect.bottom - rect.top)) * 2 + 1;
 
 			raycaster.setFromCamera(pointer, camera);
-			let intersects = raycaster.intersectObject(dummy);
+			let intersects = raycaster.intersectObject(dummy, false);
 			if (intersects.length > 0 && intersects[0].point !== undefined) {
 				let { x, y }: THREE.Vec2 = intersects[0].point;
 				fboMaterial.uniforms.uMouse.value = new THREE.Vector2(x, y);
@@ -188,9 +259,6 @@ function main() {
 
 	// fbo ends
 
-	// time
-	// const clock = new THREE.Clock();
-
 	function getRenderTarget() {
 		if (canvas === null) {
 			throw new Error('CANVAS ELEMENT DOES NOT EXIST');
@@ -214,7 +282,7 @@ function main() {
 	let geometry = new THREE.BufferGeometry();
 	let postions = new Float32Array(count * 3);
 	// dapat 2 to dati testing ko lang
-	let uv = new Float32Array(count * 3);
+	let uv = new Float32Array(count * 2);
 	for (let i = 0; i < size; i++) {
 		for (let k = 0; k < size; k++) {
 			let index = i + k * size;
@@ -235,15 +303,27 @@ function main() {
 
 	// animation
 	function render() {
-		// const deltaTime = clock.getDelta();
-		// resizes the display
 		rayCasting();
 		if (resizeRendererToDisplaySize(renderer)) {
 			const canvas = renderer.domElement;
 			camera.aspect = canvas.width / canvas.height;
 			camera.updateProjectionMatrix();
 		}
-		requestAnimationFrame(render);
+
+		analyser.getByteFrequencyData(dataArray);
+
+		const poop = dataArray.reduce(
+			(accumulator, currentValue) => accumulator + currentValue,
+			0
+		);
+		const average = poop / 256;
+		const normalize = average / 50;
+
+		fboMaterial.uniforms.uFreq.value = normalize;
+
+		// init raycasting
+		rayCasting();
+
 		shapeMaterial.uniforms.time.value += 0.05;
 		fboMaterial.uniforms.time.value += 0.05;
 
@@ -259,11 +339,7 @@ function main() {
 		fbo = fbo1;
 		fbo1 = temp;
 
-		if (canvas == null) {
-			throw new Error('CANVAS DOES NOT EXIST');
-		}
-		const resolution = new THREE.Vector2(canvas.width, canvas.height);
-		shapeMaterial.uniforms.u_resolution.value.copy(resolution);
+		requestAnimationFrame(render);
 	}
 
 	requestAnimationFrame(render);

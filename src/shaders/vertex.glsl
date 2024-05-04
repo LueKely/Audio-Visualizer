@@ -5,6 +5,7 @@ precision mediump float;
 varying vec2 vUv;
 varying vec4 vColor;
 uniform float time;	
+// uniform float uFreq;
 uniform sampler2D uPositions;
   
 void main()	{
@@ -13,7 +14,17 @@ vec4 pos = texture2D(uPositions, uv);
 
 float angle = atan(pos.y,pos.x);
 
-vColor = vec4(0.5 + 0.45 * sin(angle + time )) * 0.9;
+
+vec3 colorA = vec3(0.176,0.788,0.329);
+// vec3 colorB = vec3(0.07, 0.93, 0.25);
+// float pct = uFreq;
+// vec3 mixed = mix(colorA, colorB, pct);
+
+float rotate = 0.55 + 0.55 * sin(angle + time) ;
+vColor = vec4(colorA,rotate) ;
+
+
+
 
 vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.);
 gl_PointSize = 1. * (1./ - mvPosition.z);

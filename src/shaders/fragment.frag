@@ -4,9 +4,9 @@ precision mediump float;
 
 
 uniform float time; // basically u_time
-uniform vec2 u_resolution;
 varying vec2 vUv; //the resolution
 varying vec4 vColor;
+uniform float uFreq;
 
 void main(){
   // choose either of the two
@@ -17,6 +17,7 @@ void main(){
   // vec2 coord =   gl_FragCoord.xy / u_resolution;
   // gl_FragColor = vec4(cos(len * 2.0), cos(len - 1.0), sin(time *0.5) , 1.0);
 
-  gl_FragColor = vColor;
+  gl_FragColor = vec4(vColor);
+    // gl_FragColor = vec4( uFreq);
 
 }

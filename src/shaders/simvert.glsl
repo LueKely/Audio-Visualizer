@@ -6,7 +6,7 @@ varying vec2 vUv;
 uniform float time;		
 varying vec3 vPosition;
 float PI = 3.14159265358979323846;
-  
+
 void main()	{
 	vUv = uv;
 	// projectionMatrix, modelViewMatrix, position -> passed in from Three.js

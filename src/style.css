@@ -1,12 +1,80 @@
-body {
-	margin: 0;
-	height: 100dvh;
-	width: 100dvw;
-	background-color: rgb(19, 19, 27);
+@import url('./assets/css/canvas.css');
+@import url('./assets/css/fonts.css');
+@import url('./assets/css/player.css');
+@import url('./assets/css/playlist.css');
+@import url('./assets/css/audioControl.css');
+@font-face {
+	font-family: 'PPMori-Regular';
+	src: url('./assets/font/PPMori-Regular.otf');
 }
 
-canvas {
+@font-face {
+	font-family: 'PPMori-Extralight';
+	src: url('./assets/font/PPMori-Extralight.otf');
+}
+
+@font-face {
+	font-family: 'PPMori-SemiBold';
+	src: url('./assets/font/PPMori-SemiBold.otf');
+}
+
+@font-face {
+	font-family: 'PPMori-ExtralightItalic';
+	src: url('./assets/font/PPMori-ExtralightItalic.otf');
+}
+
+:root {
+	--bg: #0b0f0d;
+	--font: #2dc954;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	height: 100svh;
+	margin: 0;
+	background: var(--bg);
+	position: relative;
+	color: var(--font);
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+}
+
+hr {
+	color: var(--font);
+}
+
+svg {
+	height: 0px;
+	position: absolute;
+}
+
+body::before,
+body::after {
+	position: absolute;
+	left: 0;
+	top: 0;
+	content: '';
 	width: 100%;
 	height: 100%;
-	display: block;
+	z-index: -1;
+	opacity: 10%;
+}
+
+body::before {
+	background: #1d2922;
+	filter: url(#noiseFilter);
+}
+
+main {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

@@ -1,0 +1,157 @@
+header {
+	width: 100%;
+	padding: 1rem;
+}
+
+.circle {
+	position: absolute;
+	background-color: rgb(34, 194, 106);
+
+	width: 100px;
+	height: 100px;
+	filter: blur(150px);
+	border-radius: 100px;
+}
+
+.one {
+	left: 0;
+	top: 0;
+}
+
+.two {
+	bottom: 0;
+	right: 0;
+}
+
+.player_wrapper {
+	flex: 1;
+	height: 100%;
+	padding-right: 1rem;
+}
+
+.canvas_wrapper {
+	flex: 1.5;
+	height: 100%;
+	width: 100%;
+}
+
+.slider_wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 1rem;
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.slider_wrapper > * {
+	width: 6rem;
+
+	text-align: center;
+}
+
+.slider_wrapper > li:hover {
+	cursor: pointer;
+}
+
+.line_wrapper {
+	user-select: none;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	flex-direction: column;
+	/* background-color: red; */
+	margin-bottom: 2rem;
+}
+.line {
+	transition: transform ease-out 150ms;
+	width: 6rem;
+	height: 0.1rem;
+	background-color: var(--font);
+	animation-name: poopOverReverse;
+	animation-duration: 350ms;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-in;
+}
+
+.moveRight {
+	transition: transform ease-out 150ms;
+	animation-name: poopOver;
+	animation-duration: 350ms;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+}
+
+.hide {
+	animation-name: hide;
+	animation-duration: 150ms;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-in-out;
+}
+
+.unhide {
+	animation-name: unhide;
+	animation-duration: 150ms;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-in-out;
+}
+
+.articleList {
+	opacity: 0%;
+}
+
+@keyframes poopOver {
+	0% {
+		width: 6rem;
+	}
+	40%,
+	60%,
+	50% {
+		width: 8rem;
+	}
+
+	100% {
+		width: 6rem;
+		transform: translateX(7rem);
+	}
+}
+
+@keyframes poopOverReverse {
+	0% {
+		width: 6rem;
+		transform: translateX(7rem);
+	}
+
+	40%,
+	60%,
+	50% {
+		width: 8rem;
+	}
+
+	100% {
+		width: 6rem;
+		transform: translateX(0rem);
+	}
+}
+
+@keyframes hide {
+	0% {
+		opacity: 100%;
+	}
+
+	100% {
+		opacity: 0%;
+	}
+}
+
+@keyframes unhide {
+	0% {
+		opacity: 0%;
+	}
+
+	100% {
+		opacity: 100%;
+	}
+}
