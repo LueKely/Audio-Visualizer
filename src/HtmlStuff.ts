@@ -52,8 +52,21 @@ function renderHtml() {
 	});
 
 	time.forEach((timeItem, index) => {
-		timeItem.textContent = formatSecondsAsTime(Tracks[index]?.duration);
+		const calcTime =
+			Math.floor(Tracks[index].duration) -
+			Math.floor(Tracks[index].currentTime);
+
+		timeItem.textContent = formatSecondsAsTime(calcTime);
 	});
+
+	setInterval(() => {
+		Tracks.forEach((track, index) => {
+			const calcTime =
+				Math.floor(track.duration) - Math.floor(track.currentTime);
+
+			time[index].textContent = formatSecondsAsTime(calcTime);
+		});
+	}, 500);
 }
 
 function str_pad_left(string: string, pad: string, length: number) {

@@ -51,7 +51,12 @@
 	cursor: pointer;
 }
 
+.timer_wrapper {
+	z-index: 1;
+}
+
 .track_wrapper > li:hover > p,
+.track_wrapper > li:hover > .timer_wrapper > p,
 .track_wrapper > li:hover > .play > p {
 	transition: all ease-in-out 350ms;
 
