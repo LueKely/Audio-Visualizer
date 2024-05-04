@@ -46,6 +46,10 @@ trackWrapper.forEach((wrapper, index) => {
 		trackList[index].connect(audioContext.destination);
 		trackList[index].connect(analyser);
 
+		if (audioContext.state === 'suspended') {
+			audioContext.resume();
+		}
+
 		if (!audioElement[index].paused) {
 			audioElement[index].pause();
 			nowPlaying[index].textContent = 'paused';
@@ -117,7 +121,6 @@ function main() {
 	const light = new THREE.DirectionalLight(color, intensity);
 	light.position.set(-1, 2, 4);
 	scene.add(light);
-
 
 	const shapeMaterial = new THREE.ShaderMaterial({
 		wireframe: false,
