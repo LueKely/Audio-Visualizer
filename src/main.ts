@@ -6,7 +6,6 @@ import fragment from './shaders/fragment.frag';
 import vertex from './shaders/vertex.glsl';
 import simvertex from './shaders/simvert.glsl';
 import simfragment from './shaders/simfragment.glsl';
-import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
 function resizeRendererToDisplaySize(renderer: THREE.WebGLRenderer) {
 	const canvas = renderer.domElement;
@@ -119,8 +118,8 @@ function main() {
 	light.position.set(-1, 2, 4);
 	scene.add(light);
 
-	//shape
-	const geo = new THREE.PlaneGeometry(35, 35, 30, 30);
+	// //shape
+	// const geo = new THREE.PlaneGeometry(35, 35, 30, 30);
 	const shapeMaterial = new THREE.ShaderMaterial({
 		wireframe: false,
 		side: THREE.DoubleSide,
