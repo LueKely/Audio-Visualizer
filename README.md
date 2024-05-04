@@ -12,7 +12,7 @@ this is an audio visualizer for Steve Reich's composition, "Music For 18 Musicia
 ## Acknowledgements:
 - this has terrible performance
 - this has **NO MOBILE VIEW** (i hate mobile view 💢)
-- I have not done this with the help of ![Yuri Aktiuikh's](https://www.youtube.com/@akella_) streams about FBO particles
+- I have not done this without the help of [Yuri Aktiuikh's](https://www.youtube.com/@akella_) streams about FBO particles
   
 ## Snapshot:
 ![alt text](https://github.com/LueKely/Audio-Visualizer/blob/main/public/snapshot.webp)
